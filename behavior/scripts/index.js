@@ -2,6 +2,30 @@
 
 exports.handle = (client) => {
   // Create steps
+  const handleGoodbye = client.createStep({
+    satisfied() {
+      return false
+    },
+
+    prompt() {
+      client.addResponse('goodbye')
+      // client.addTextResponse('GB')
+      client.done()
+    }
+  })
+
+  const handleGreeting = client.createStep({
+    satisfied() {
+      return false
+    },
+
+    prompt() {
+      client.addResponse('greeting')
+      // client.addTextResponse('heeeey')
+      client.done()
+    }
+  })
+
   const sayHello = client.createStep({
     satisfied() {
       return Boolean(client.getConversationState().helloSent)
@@ -36,14 +60,19 @@ exports.handle = (client) => {
   client.runFlow({
     classifications: {
       // map inbound message classifications to names of streams
+      goodbye: 'goodbye',
+      greeting: 'greeting',
+
     },
     autoResponses: {
       // configure responses to be automatically sent as predicted by the machine learning model
     },
     streams: {
+      end: [untrained],
+      goodbye: handleGoodbye,
+      greeting: handleGreeting,
       main: 'onboarding',
       onboarding: [sayHello],
-      end: [untrained],
     },
   })
 }

@@ -13,4 +13,4 @@ bye
 * goodbye
 
 < ya mata
-* welcome
+* goodbye
